@@ -1,8 +1,21 @@
 #!/usr/bin/env python
+""" speak-entertainer.
+
+Usage:
+    speak [-h] [-t TEXT] [-f FILE]
+
+Options:
+    -h --help               Show this screen.
+    -t TEXT, --text TEXT    Text to reproduce.
+    -f FILE, --file FILE    File to take random line and reproduce it.
+"""
+
 import binascii
+import docopt
 import os
 import pygame
 import random
+import sys
 import subprocess
 
 from gtts import gTTS
@@ -21,16 +34,27 @@ def get_text_to_speech_file(text):
     return tmp_file_path
 
 
-if __name__ == "__main__":
-    with open("/etc/speak/frases.txt") as file:
-       sentences = [line for line in file]
-    audio_files = []
-    for sentence in sentences:
-        audio_files.append(get_text_to_speech_file(sentence))
-
+def reproduce_file(_file):
     pygame.mixer.init()
-    pygame.mixer.music.load(random.choice(audio_files))
+    pygame.mixer.music.load(_file)
     pygame.mixer.music.play()
     while pygame.mixer.music.get_busy() == True:
         continue
+
+if __name__ == "__main__":
+    arguments = docopt.docopt(__doc__)
+
+    if arguments["--text"]:
+        reproduce_file(get_text_to_speech_file(arguments["--text"]))
+        exit
+
+    if arguments["--file"]:
+        with open(arguments["--file"]) as file:
+           sentences = [line for line in file]
+        audio_files = []
+        for sentence in sentences:
+            audio_files.append(get_text_to_speech_file(sentence))
+
+        reproduce_file(random.choice(audio_files))
+        exit
 
