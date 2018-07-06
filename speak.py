@@ -2,12 +2,13 @@
 """ speak-entertainer.
 
 Usage:
-    speak [-h] [-t TEXT] [-f FILE]
+    speak [-h] [-l LANGUAGE] [-t TEXT | -f FILE]
 
 Options:
-    -h --help               Show this screen.
-    -t TEXT, --text TEXT    Text to reproduce.
-    -f FILE, --file FILE    File to take random line and reproduce it.
+    -h --help                          Show this screen.
+    -l LANGUAGE, --language LANGUAGE    Choose language. [default: es]
+    -t TEXT, --text TEXT               Text to reproduce.
+    -f FILE, --file FILE               File to take random line and reproduce it.
 """
 
 import binascii
@@ -26,10 +27,10 @@ def generate_random_string(length):
     random_string = binascii.hexlify(random_bits)
     return random_string.decode('utf-8')
 
-def get_text_to_speech_file(text):
+def get_text_to_speech_file(text, language="es"):
     tmp_file_path = '/tmp/{path}.mp3'.format( path = text)
     if not os.path.isfile(tmp_file_path):
-        tts = gTTS(text=text, lang='es')
+        tts = gTTS(text=text, lang=language)
         tts.save(tmp_file_path)
     return tmp_file_path
 
@@ -43,9 +44,8 @@ def reproduce_file(_file):
 
 if __name__ == "__main__":
     arguments = docopt.docopt(__doc__)
-
     if arguments["--text"]:
-        reproduce_file(get_text_to_speech_file(arguments["--text"]))
+        reproduce_file(get_text_to_speech_file(arguments["--text"], arguments["--language"]))
         exit
 
     if arguments["--file"]:
