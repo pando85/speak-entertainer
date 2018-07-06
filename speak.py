@@ -31,9 +31,9 @@ def generate_random_string(length):
 def get_text_to_speech_file(text, language="es"):
     h = hashlib.new('sha512')
     h.update(text)
-    path = h.hexdigest()
+    _hash = h.hexdigest()
     tmp_file_path = '/tmp/{path}-{language}.mp3'.format(
-        path = path , language = language)
+        path = _hash , language = language)
     if not os.path.isfile(tmp_file_path):
         tts = gTTS(text=text, lang=language)
         tts.save(tmp_file_path)
