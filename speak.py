@@ -18,6 +18,7 @@ import pygame
 import random
 import sys
 import subprocess
+import hashlib
 
 from gtts import gTTS
 
@@ -28,8 +29,11 @@ def generate_random_string(length):
     return random_string.decode('utf-8')
 
 def get_text_to_speech_file(text, language="es"):
+    h = hashlib.new('sha512')
+    h.update(text)
+    path = h.hexdigest()
     tmp_file_path = '/tmp/{path}-{language}.mp3'.format(
-        path = text, language = language)
+        path = path , language = language)
     if not os.path.isfile(tmp_file_path):
         tts = gTTS(text=text, lang=language)
         tts.save(tmp_file_path)
