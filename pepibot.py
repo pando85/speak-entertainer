@@ -26,8 +26,6 @@ if __name__ == "__main__":
     token = key['token']
     authorized_ids = key['authorized_ids']
 
-  print (token)
-  print (authorized_ids)
   telegram = telepot.Bot(token)
 
   MessageLoop(telegram,handle).run_as_thread()

@@ -12,7 +12,7 @@ Se parsea el fichero *pepibot.yml* para obtener el token del bot de Telegram y l
 ---
 
 token: "AAAAAAAAAAAAAA"
-authorized_keys:
+authorized_ids:
   - 11111
   - 22222
   - 33333
