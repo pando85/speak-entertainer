@@ -6,10 +6,9 @@ from telepot.loop import MessageLoop
 import speak
 import yaml
 
+# leyendo variables de pepibot.yml
 stream = open("pepibot.yml","r")
-
 my_dict = yaml.load_all(stream)
-
 for key in my_dict:
   token = key['token']
   authorized_ids = key['authorized_ids']
@@ -21,7 +20,7 @@ def handle(msg):
       return
   if content_type == 'text':
     speak.reproduce_file(speak.get_text_to_speech_file(msg['text']))
-    #telegram.sendMessage(chat_id, msg['text'])
+
     
 if name == "main":
   telegram = telepot.Bot(token)
