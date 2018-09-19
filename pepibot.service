@@ -1,0 +1,10 @@
+[Unit]
+Description=PEpi bot Telegram
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python2 /usr/local/bin/pepibot.py
+
+[Install]
+WantedBy=multi-user.target
