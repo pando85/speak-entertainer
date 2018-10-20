@@ -28,14 +28,14 @@ if __name__ == "__main__":
 
   parser = argparse.ArgumentParser()
   parser.add_argument("-c", "--config", required=True, help="Define el fichero json de configuracion del script")
-  args = vars(parser.parse_args())
+  args = parser.parse_args()
 
-  secretos = lee_secretos(args["config"])
+  secretos = lee_secretos(args.config)
   telegram = telepot.Bot(secretos["token"])
   MessageLoop(telegram,handle).run_as_thread()
 
   while 1:
-    secretos = lee_secretos(args["config"])
+    secretos = lee_secretos(args.config)
     time.sleep(300)
 
     
