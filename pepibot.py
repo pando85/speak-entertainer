@@ -4,12 +4,17 @@ import time
 import telepot
 from telepot.loop import MessageLoop
 import speak
-import yaml
+import json
 import syslog
+
+
+def lee_secretos():
+  with open('pepibot.json', 'r') as f:
+    return json.load(f)
 
 def handle(msg):
   content_type, chat_type, chat_id = telepot.glance(msg)
-  if chat_id not in authorized_ids:
+  if chat_id not in secretos["authorized_ids"]:
       log = 'El usuario %s esta perdiendo el tiempo intentando que diga \"%s\"' %(telegram.getChat(chat_id)['first_name'],msg['txt'])
       return
   if content_type == 'text':
@@ -19,17 +24,12 @@ def handle(msg):
 
 
 if __name__ == "__main__":
-  # leyendo variables de pepibot.yml
-  stream = open("pepibot.yml","r")
-  my_dict = yaml.load_all(stream)
-  for key in my_dict:
-    token = key['token']
-    authorized_ids = key['authorized_ids']
-
-  telegram = telepot.Bot(token)
-
+  secretos = lee_secretos()
+  telegram = telepot.Bot(secretos["token"])
   MessageLoop(telegram,handle).run_as_thread()
+
   while 1:
-    time.sleep(1)
+    secretos = lee_secretos()
+    time.sleep(300)
 
     
