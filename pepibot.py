@@ -6,10 +6,11 @@ from telepot.loop import MessageLoop
 import speak
 import json
 import syslog
+import argparse
 
 
-def lee_secretos():
-  with open('pepibot.json', 'r') as f:
+def lee_secretos(configfile):
+  with open(configfile, 'r') as f:
     return json.load(f)
 
 def handle(msg):
@@ -24,12 +25,17 @@ def handle(msg):
 
 
 if __name__ == "__main__":
-  secretos = lee_secretos()
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument("-c", "--config", required=True, help="Define el fichero json de configuracion del script")
+  args = vars(parser.parse_args())
+
+  secretos = lee_secretos(args["config"])
   telegram = telepot.Bot(secretos["token"])
   MessageLoop(telegram,handle).run_as_thread()
 
   while 1:
-    secretos = lee_secretos()
+    secretos = lee_secretos(args["config"])
     time.sleep(300)
 
     
