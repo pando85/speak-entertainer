@@ -15,11 +15,11 @@ def lee_secretos():
 def handle(msg):
   content_type, chat_type, chat_id = telepot.glance(msg)
   if chat_id not in secretos["authorized_ids"]:
-      log = 'El usuario %s esta perdiendo el tiempo intentando que diga \"%s\"' %(telegram.getChat(chat_id)['first_name'],msg['txt'])
+      log = 'El usuario %s esta perdiendo el tiempo intentando que diga \"%s\"' %(telegram.getChat(chat_id)['first_name'],msg['text'])
       return
   if content_type == 'text':
     speak.reproduce_file(speak.get_text_to_speech_file(msg['text']))
-    log = 'El usuario %s me ha obligado a decir \"%s\"' %(telegram.getChat(chat_id)['first_name'],msg['txt'])
+    log = 'El usuario %s me ha obligado a decir "%s"' %(telegram.getChat(chat_id)['first_name'],msg['text'])
   syslog.syslog(log)
 
 
