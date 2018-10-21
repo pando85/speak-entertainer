@@ -4,32 +4,38 @@ import time
 import telepot
 from telepot.loop import MessageLoop
 import speak
-import yaml
+import json
 import syslog
+import argparse
+
+
+def lee_secretos(configfile):
+  with open(configfile, 'r') as f:
+    return json.load(f)
 
 def handle(msg):
   content_type, chat_type, chat_id = telepot.glance(msg)
-  if chat_id not in authorized_ids:
-      log = 'El usuario %s esta perdiendo el tiempo intentando que diga \"%s\"' %(telegram.getChat(chat_id)['first_name'],msg['txt'])
+  if chat_id not in secretos["authorized_ids"]:
+      log = 'El usuario %s esta perdiendo el tiempo intentando que diga \"%s\"' %(telegram.getChat(chat_id)['first_name'],msg['text'])
       return
   if content_type == 'text':
     speak.reproduce_file(speak.get_text_to_speech_file(msg['text']))
-    log = 'El usuario %s me ha obligado a decir \"%s\"' %(telegram.getChat(chat_id)['first_name'],msg['txt'])
+    log = 'El usuario %s me ha obligado a decir "%s"' %(telegram.getChat(chat_id)['first_name'],msg['text'])
   syslog.syslog(log)
 
 
 if __name__ == "__main__":
-  # leyendo variables de pepibot.yml
-  stream = open("pepibot.yml","r")
-  my_dict = yaml.load_all(stream)
-  for key in my_dict:
-    token = key['token']
-    authorized_ids = key['authorized_ids']
 
-  telegram = telepot.Bot(token)
+  parser = argparse.ArgumentParser()
+  parser.add_argument("-c", "--config", required=True, help="Define el fichero json de configuracion del script")
+  args = parser.parse_args()
 
+  secretos = lee_secretos(args.config)
+  telegram = telepot.Bot(secretos["token"])
   MessageLoop(telegram,handle).run_as_thread()
+
   while 1:
-    time.sleep(1)
+    secretos = lee_secretos(args.config)
+    time.sleep(300)
 
     
