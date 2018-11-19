@@ -19,6 +19,8 @@ import random
 import sys
 import subprocess
 import hashlib
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 from gtts import gTTS
 
