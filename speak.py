@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """ speak-entertainer.
 
 Usage:
@@ -23,6 +22,8 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 from gtts import gTTS
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 def generate_random_string(length):
@@ -30,12 +31,14 @@ def generate_random_string(length):
     random_string = binascii.hexlify(random_bits)
     return random_string.decode('utf-8')
 
+
 def get_text_to_speech_file(text, language="es"):
     h = hashlib.new('sha512')
     h.update(text)
     _hash = h.hexdigest()
     tmp_file_path = '/tmp/{path}-{language}.mp3'.format(
         path = _hash , language = language)
+
     if not os.path.isfile(tmp_file_path):
         tts = gTTS(text=text, lang=language)
         tts.save(tmp_file_path)
@@ -43,18 +46,13 @@ def get_text_to_speech_file(text, language="es"):
 
 
 def reproduce_file(_file):
-    pygame.mixer.init()
-    pygame.mixer.music.load(_file)
-    pygame.mixer.music.play()
-    while pygame.mixer.music.get_busy() == True:
-        continue
+    subprocess.call(["cvlc", "--play-and-exit", _file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 if __name__ == "__main__":
     arguments = docopt.docopt(__doc__)
     if arguments["--text"]:
         reproduce_file(get_text_to_speech_file(arguments["--text"], arguments["--language"]))
         exit
-
     if arguments["--file"]:
         with open(arguments["--file"]) as file:
            sentences = [line for line in file]
@@ -64,4 +62,5 @@ if __name__ == "__main__":
 
         reproduce_file(random.choice(audio_files))
         exit
+
 
