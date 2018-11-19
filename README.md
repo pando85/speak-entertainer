@@ -2,6 +2,11 @@
 
 ## speak.py
 
+### requirements
+
+- vlc
+- python2
+
 ## pepibot.py
 
 Este script usa el bot de Telegram [@misspepi_bot](http://telegram.me/misspepi_bot) para quedar a la escucha y reproducir con *speak.py* el mensaje que le envíen los usuarios autorizados
