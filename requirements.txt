@@ -9,5 +9,5 @@ gTTS-token==1.1.2
 idna==2.7
 requests==2.19.1
 six==1.11.0
-urllib3==1.23
+urllib3==1.26.5
 telepot==12.7
